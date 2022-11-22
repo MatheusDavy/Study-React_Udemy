@@ -1,4 +1,3 @@
-import './App.css';
 import { Component } from 'react'
 
 
@@ -64,13 +63,3 @@ export default class App extends Component {
     );
   }
 }
-
-//Component de função
-// export default function App() {
-//   return (
-//    <>
-//    <div>Hello World</div>
-//    </>
-//   );
-// }
-
