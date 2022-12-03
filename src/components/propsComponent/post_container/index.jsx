@@ -13,7 +13,7 @@ export default class App extends Component {
     posts: [],
     allPosts: [],
     page: 0,
-    postPerPage: 2,
+    postPerPage: 50,
   };
 
   timeoutUpdate = null;
@@ -47,7 +47,8 @@ export default class App extends Component {
   }
 
   render() {
-    const { posts } = this.state;
+    const { posts, page, postPerPage, allPosts } = this.state;
+    const disabledButton = page + postPerPage >= allPosts
     return (
       <div className="container">
         <div className="container-posts">
@@ -65,6 +66,7 @@ export default class App extends Component {
         <Button
           text="Load More Posts"
           onClick={this.loadMorePost} //Isto aqui não é um evento, é uma props
+          disabled={disabledButton}
         />
       </div>
     );

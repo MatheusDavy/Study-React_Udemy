@@ -14,3 +14,9 @@ button#load-more-post{
 button#load-more-post:hover{
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.481);
 }
+
+button#load-more-post:disabled{
+    background-color: gray;
+    color: black;
+    cursor: not-allowed;
+}
