@@ -1,4 +1,4 @@
-import { Component } from "react";
+import {useEffect, useState } from "react";
 import React from "react";
 //css
 import "./style.css";
@@ -6,49 +6,37 @@ import "./style.css";
 import { PostCard } from "../post_card/index";
 import { Button } from "../Button";
 //js
-import { loadPosts } from "../utils/load_post";
+import { loadPosts } from "../../../utils/load_post";
 //Components de classe
-export default class App extends Component {
-  state = {
-    posts: [],
-    allPosts: [],
-    page: 0,
-    postPerPage: 50,
-  };
+export function AllPosts () {
+ 
+  const [posts, setPosts] = useState([])
+  const [allPosts, setAllPosts] = useState([])
+  const [page, setPage] = useState(10)
+  const [postPerPage] = useState(17)
 
-  timeoutUpdate = null;
+  const disabledButton = page + postPerPage >= allPosts
 
-  //Quando o component (o que estiver dentro do return) for montado, essa função irá disparar
-  async componentDidMount() {
-    await this.loadPosts();
-  }
-
-  loadPosts = async () => {
-    const { page, postPerPage } = this.state;
+  const handleLoadPosts = async () => {
     const postsPhotosComents = await loadPosts(); //chamando a função
-    this.setState({
-      posts: postsPhotosComents.slice(page, postPerPage),
-      allPosts: postsPhotosComents,
-    });
+    setPosts(postsPhotosComents.slice(page, postPerPage))
+    setAllPosts(postsPhotosComents)
   };
 
-  loadMorePost = ()=>{
-      const {
-        page,
-        postPerPage,
-        allPosts,
-        posts,
-      } = this.state;
-
+  function loadMorePost(){
       const nextPage = page + postPerPage
       const nextPosts = allPosts.slice(nextPage, nextPage + postPerPage)
       posts.push(...nextPosts) //vai pegar todo o conteudo já existente (...) em posts e vai adicionar mais os NextPost
-      this.setState({posts, page: nextPage})
+      setPosts(posts)
+      setPage(nextPage)
   }
 
-  render() {
-    const { posts, page, postPerPage, allPosts } = this.state;
-    const disabledButton = page + postPerPage >= allPosts
+  useEffect(()=>{
+    handleLoadPosts()
+  }, [])
+
+ 
+
     return (
       <div className="container">
         <div className="container-posts">
@@ -65,10 +53,10 @@ export default class App extends Component {
         </div>
         <Button
           text="Load More Posts"
-          onClick={this.loadMorePost} //Isto aqui não é um evento, é uma props
+          onClick={loadMorePost}
           disabled={disabledButton}
         />
       </div>
     );
-  }
+  
 }
